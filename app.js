@@ -22,8 +22,9 @@ const db = require('./Database.js');
 const app = express();
 
 // set up cors to work with front end and back end, also allows CRUD ops
+// origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com']
 const corsOptions = {
-    origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com'], 
+    origin: ['http://localhost:5173/'], 
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
 };
@@ -60,7 +61,7 @@ app.use('/auth', authRoutes);
 
 
 // Login route
-app.post('https://capstone-ally-api.vercel.app/api/login', passport.authenticate('local'), (req, res) => {
+app.post('https://ecommercev2-ytjg.onrender.com/api/login', passport.authenticate('local'), (req, res) => {
     if (req.isAuthenticated()) {
         res.json({
             message: 'Login successful',
@@ -72,7 +73,7 @@ app.post('https://capstone-ally-api.vercel.app/api/login', passport.authenticate
 });
 
 // Signup route
-app.post('https://capstone-ally-api.vercel.app/api/signup', async (req, res) => {
+app.post('https://ecommercev2-ytjg.onrender.com/api/signup', async (req, res) => {
     const { username, password, isAdmin } = req.body;
     if (!username || !password) {
         return res.status(400).json({ message: 'Username and password are required' });
@@ -96,7 +97,7 @@ app.post('https://capstone-ally-api.vercel.app/api/signup', async (req, res) => 
 });
 
 // Route to select all users from users table
-app.get('https://capstone-ally-api.vercel.app/api/users', async (req, res) => {
+app.get('https://ecommercev2-ytjg.onrender.com/api/users', async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT * FROM users');
         res.json(rows);
@@ -108,7 +109,7 @@ app.get('https://capstone-ally-api.vercel.app/api/users', async (req, res) => {
 
 // Logout route
 //needds work
-app.get('https://capstone-ally-api.vercel.app/api/logout', (req, res) => {
+app.get('https://ecommercev2-ytjg.onrender.com/api/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error('Logout error:', err);
@@ -131,7 +132,7 @@ app.get('https://capstone-ally-api.vercel.app/api/logout', (req, res) => {
 
 // contact form routes
 
-app.post('https://capstone-ally-api.vercel.app/api/submit-form', async (req, res) => {
+app.post('https://ecommercev2-ytjg.onrender.com/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;
   
     try {
@@ -163,7 +164,7 @@ app.post('https://capstone-ally-api.vercel.app/api/submit-form', async (req, res
 
 
 
-app.get('/contact/info', async (req, res) => {
+app.get('https://ecommercev2-ytjg.onrender.com/contact/info', async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT * FROM Contact_Form;');
         res.json(rows);
