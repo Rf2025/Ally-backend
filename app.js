@@ -41,7 +41,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } 
+    cookie: { secure: true } 
 }));
 
 
@@ -188,5 +188,5 @@ app.get('/contact/info', async (req, res) => {
 
 // Start the server
 app.listen(30004, () => {
-    console.log('Server running on port 30003');
+    console.log('Server running on port 30004');
 });
