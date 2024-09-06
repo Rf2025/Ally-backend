@@ -22,6 +22,7 @@ const db = require('./Database.js');
 const app = express();
 
 // set up cors to work with front end and back end, also allows CRUD ops
+
 const corsOptions = {
     origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com'], 
     methods: 'GET,POST,PUT,DELETE',
@@ -56,7 +57,7 @@ passportConfig(passport);
 // routes for authetication
 const authRoutes = require('./routes/auth.js');
 const { result } = require('underscore');
-app.use('/auth', authRoutes);
+app.use('./routes/auth.js', authRoutes);
 
 
 // Login route
@@ -105,6 +106,13 @@ app.get('/api/users', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching users.' });
     }
 });
+
+
+
+
+
+
+
 
 // Logout route
 //needds work
