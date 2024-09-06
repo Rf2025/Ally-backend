@@ -22,9 +22,8 @@ const db = require('./Database.js');
 const app = express();
 
 // set up cors to work with front end and back end, also allows CRUD ops
-// origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com']
 const corsOptions = {
-    origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com/'], 
+    origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com'], 
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
 };
@@ -41,7 +40,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true } 
+    cookie: { secure: false } 
 }));
 
 
@@ -61,7 +60,7 @@ app.use('/auth', authRoutes);
 
 
 // Login route
-app.post('/api/login', passport.authenticate('local'), (req, res) => {
+app.post('https://capstone-ally-api.vercel.app/api/login', passport.authenticate('local'), (req, res) => {
     if (req.isAuthenticated()) {
         res.json({
             message: 'Login successful',
@@ -73,7 +72,7 @@ app.post('/api/login', passport.authenticate('local'), (req, res) => {
 });
 
 // Signup route
-app.post('/api/signup', async (req, res) => {
+app.post('https://capstone-ally-api.vercel.app/api/signup', async (req, res) => {
     const { username, password, isAdmin } = req.body;
     if (!username || !password) {
         return res.status(400).json({ message: 'Username and password are required' });
@@ -97,7 +96,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 // Route to select all users from users table
-app.get('/api/users', async (req, res) => {
+app.get('https://capstone-ally-api.vercel.app/api/users', async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT * FROM users');
         res.json(rows);
@@ -107,85 +106,9 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-
-
-// Create a new user
-app.post('/api/users', async (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json({ error: 'Name and email are required.' });
-    }
-    try {
-        const [result] = await db.execute('INSERT INTO users (name, email) VALUES (?, ?)', [name, email]);
-        const newUser = { id: result.insertId, name, email };
-        res.status(201).json(newUser);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while creating the user.' });
-    }
-});
-
-// Update an existing user
-app.put('/api/users/:id', async (req, res) => {
-    const userId = req.params.id;
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).json({ error: 'Name and email are required.' });
-    }
-    try {
-        const [result] = await db.execute('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, userId]);
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-        res.json({ id: userId, name, email });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while updating the user.' });
-    }
-});
-
-// Delete a user
-app.delete('/api/users/:id', async (req, res) => {
-    const userId = req.params.id;
-    try {
-        const [result] = await db.execute('DELETE FROM users WHERE id = ?', [userId]);
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'User not found.' });
-        }
-        res.status(204).send();
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while deleting the user.' });
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Logout route
 //needds work
-app.get('/api/logout', (req, res) => {
+app.get('https://capstone-ally-api.vercel.app/api/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error('Logout error:', err);
@@ -208,7 +131,7 @@ app.get('/api/logout', (req, res) => {
 
 // contact form routes
 
-app.post('/api/submit-form', async (req, res) => {
+app.post('https://capstone-ally-api.vercel.app/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;
   
     try {
@@ -264,5 +187,5 @@ app.get('/contact/info', async (req, res) => {
 
 // Start the server
 app.listen(30004, () => {
-    console.log('Server running on port 30004');
+    console.log('Server running on port 30003');
 });
