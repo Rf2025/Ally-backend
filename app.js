@@ -149,7 +149,7 @@ app.post('/api/submit-form', async (req, res) => {
   
       const result = await db.query(
         'INSERT INTO Contact_Form (first_name,last_name,email_address,subject,comment) VALUES (?,?,?,?,?)',
-        [email, null, firstName, lastName, comment]
+        [firstName, lastName, email, subject, comment]
       );
 
       console.log(result);
