@@ -143,24 +143,23 @@ app.post('/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;
   
     try {
-    
       if (!firstName || !lastName || !email || !subject || !comment) {
         return res.status(400).json({ error: 'All fields are required.' });
       }
   
-     
       const result = await db.query(
         'INSERT INTO Contact_Form (email, phone, first_name, last_name, comment) VALUES ($1, $2, $3, $4, $5)',
-        [email, null, firstName, lastName, comment]  ,
-        console.log(result)
+        [email, null, firstName, lastName, comment]
       );
+
+      console.log(result);
   
       res.status(200).json({ message: 'Form submitted successfully.' });
     } catch (error) {
       console.error('Error inserting data:', error);
       res.status(500).json({ error: 'Error submitting form.' });
     }
-  });
+});
 
 
 
