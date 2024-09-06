@@ -24,7 +24,7 @@ const app = express();
 // set up cors to work with front end and back end, also allows CRUD ops
 // origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com']
 const corsOptions = {
-    origin: ['http://localhost:5173'], 
+    origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com'], 
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
 };
