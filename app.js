@@ -143,10 +143,7 @@ app.post('/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;
   
     try {
-      if (!firstName || !lastName || !email || !subject || !comment) {
-        return res.status(400).json({ error: 'All fields are required.' });
-      }
-  
+    
       const result = await db.query(
         'INSERT INTO Contact_Form (first_name,last_name,email_address,subject,comment) VALUES (?,?,?,?,?)',
         [firstName, lastName, email, subject, comment]
