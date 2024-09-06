@@ -107,6 +107,82 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
+
+
+// Create a new user
+app.post('/api/users', async (req, res) => {
+    const { name, email } = req.body;
+    if (!name || !email) {
+        return res.status(400).json({ error: 'Name and email are required.' });
+    }
+    try {
+        const [result] = await db.execute('INSERT INTO users (name, email) VALUES (?, ?)', [name, email]);
+        const newUser = { id: result.insertId, name, email };
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while creating the user.' });
+    }
+});
+
+// Update an existing user
+app.put('/api/users/:id', async (req, res) => {
+    const userId = req.params.id;
+    const { name, email } = req.body;
+    if (!name || !email) {
+        return res.status(400).json({ error: 'Name and email are required.' });
+    }
+    try {
+        const [result] = await db.execute('UPDATE users SET name = ?, email = ? WHERE id = ?', [name, email, userId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        res.json({ id: userId, name, email });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while updating the user.' });
+    }
+});
+
+// Delete a user
+app.delete('/api/users/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const [result] = await db.execute('DELETE FROM users WHERE id = ?', [userId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        res.status(204).send();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while deleting the user.' });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Logout route
 //needds work
 app.get('/api/logout', (req, res) => {
