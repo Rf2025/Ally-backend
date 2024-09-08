@@ -131,7 +131,68 @@ app.get('/contact/info', async (req, res) => {
     }
 });
 
-// Start the server
-app.listen(30003, () => { // Corrected port number to 30003
-    console.log('Server running on port 30003');
+
+
+// route to update a user's email by ID
+app.put('/api/users/:id', async (req, res) => {
+    const userId = req.params.id;
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+
+    try {
+       
+        const [result] = await db.execute('UPDATE users SET email = ? WHERE id = ?', [email, userId]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User email updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
 });
+
+// route to delete a user by ID
+app.delete('/api/users/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+       
+        const [result] = await db.execute('DELETE FROM users WHERE id = ?', [userId]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Start the server
+app.listen(30003, () => 
+    console.log('Server running on port 30003')
+);
