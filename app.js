@@ -102,6 +102,9 @@ app.get('/api/logout', (req, res) => {
     });
 });
 
+
+
+
 // contact form routes
 app.post('/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;

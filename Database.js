@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 
-//create all the tables the team, ensure that they are configured correctly otherwise you cant impirt
+//connection to RDS
 
 const connection = mysql.createPool({
   host: process.env.DB_HOST,

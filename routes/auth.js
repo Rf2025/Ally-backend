@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const passport = require('passport');
 
-// Route for Google authentication
+// route for Google authentication
 router.get('/google', passport.authenticate('google', ['profile', 'email']));
 
 // Route for handling Google callback

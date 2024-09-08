@@ -3,6 +3,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const db = require('./Database.js');
 
+
+
+// google passport strategy 
 module.exports = function(passport) {
     passport.use(new GoogleStrategy({
         clientID: process.env.CLIENT_ID, 
@@ -14,6 +17,9 @@ module.exports = function(passport) {
         return done(null, profile);
     }));
 
+
+
+    // Regular login strategy
     passport.use(new LocalStrategy(
         async function(username, password, done) {
             try {
@@ -35,6 +41,8 @@ module.exports = function(passport) {
         }
     ));
 
+
+    // serialize user 
     passport.serializeUser(function(user, done) {
         done(null, user.id);
     });
