@@ -7,22 +7,13 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const crypto = require('crypto');
 
-
-
-
-
-
-
-
-//require pass port config file
+//require passport config file
 const passportConfig = require('./Passport-config.js'); // Ensure correct path
 const db = require('./Database.js');
-
 
 const app = express();
 
 // set up cors to work with front end and back end, also allows CRUD ops
-
 const corsOptions = {
     origin: ['https://main.d2m4jxyp4by48k.amplifyapp.com'], 
     methods: 'GET,POST,PUT,DELETE',
@@ -31,21 +22,16 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-//create sesssions(stores cookies)
+// create sessions (stores cookies)
 app.use(session({
     secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false } 
 }));
-
-
-
 
 // Initialize Passport and session handling
 app.use(passport.initialize());
@@ -54,11 +40,9 @@ app.use(passport.session());
 // uses passport config file
 passportConfig(passport);
 
-// routes for authetication
+// routes for authentication
 const authRoutes = require('./routes/auth.js');
-const { result } = require('underscore');
-app.use('./routes/auth.js', authRoutes);
-
+app.use('/auth', authRoutes); // Corrected from './routes/auth.js' to '/auth'
 
 // Login route
 app.post('/api/login', passport.authenticate('local'), (req, res) => {
@@ -80,7 +64,7 @@ app.post('/api/signup', async (req, res) => {
     }
 
     try {
-        // Check if user email is in databasse
+        // Check if user email is in the database
         const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [username]);
         if (rows.length > 0) {
             return res.status(400).json({ message: 'Username already exists' });
@@ -107,15 +91,7 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
 // Logout route
-//needds work
 app.get('/api/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
@@ -126,46 +102,24 @@ app.get('/api/logout', (req, res) => {
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
 // contact form routes
-
 app.post('/api/submit-form', async (req, res) => {
     const { firstName, lastName, email, subject, comment } = req.body;
-  
-    try {
-    
-      const result = await db.query(
-        'INSERT INTO Contact_Form (first_name,last_name,email_address,subject,comment) VALUES (?,?,?,?,?)',
-        [firstName, lastName, email, subject, comment]
-      );
 
-      console.log(result);
-  
-      res.status(200).json({ message: 'Form submitted successfully.' });
+    try {
+        const result = await db.query(
+            'INSERT INTO Contact_Form (first_name, last_name, email_address, subject, comment) VALUES (?, ?, ?, ?, ?)',
+            [firstName, lastName, email, subject, comment]
+        );
+
+        console.log(result);
+
+        res.status(200).json({ message: 'Form submitted successfully.' });
     } catch (error) {
-      console.error('Error inserting data:', error);
-      res.status(500).json({ error: 'Error submitting form.' });
+        console.error('Error inserting data:', error);
+        res.status(500).json({ error: 'Error submitting form.' });
     }
 });
-
-
-
-
-
-
-
-
-
 
 app.get('/contact/info', async (req, res) => {
     try {
@@ -177,19 +131,7 @@ app.get('/contact/info', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 // Start the server
-app.listen(30004, () => {
+app.listen(30003, () => { // Corrected port number to 30003
     console.log('Server running on port 30003');
 });
