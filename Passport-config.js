@@ -50,10 +50,14 @@ module.exports = function(passport) {
     passport.deserializeUser(async function(id, done) {
         try {
             const [rows] = await db.execute('SELECT * FROM users WHERE id = ?', [id]);
+            if (rows.length === 0) {
+                return done(new Error('User not found'));
+            }
             const user = rows[0];
             done(null, user);
         } catch (err) {
             done(err);
         }
     });
+    
 };
